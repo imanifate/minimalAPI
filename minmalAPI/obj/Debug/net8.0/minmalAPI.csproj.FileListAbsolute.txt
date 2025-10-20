@@ -169,3 +169,4 @@ D:\asp\minmalAPI\minmalAPI\obj\Debug\net8.0\refint\minmalAPI.dll
 D:\asp\minmalAPI\minmalAPI\obj\Debug\net8.0\minmalAPI.pdb
 D:\asp\minmalAPI\minmalAPI\obj\Debug\net8.0\minmalAPI.genruntimeconfig.cache
 D:\asp\minmalAPI\minmalAPI\obj\Debug\net8.0\ref\minmalAPI.dll
+D:\asp\minmalAPI\minmalAPI\obj\Debug\net8.0\minmalAPI.sourcelink.json

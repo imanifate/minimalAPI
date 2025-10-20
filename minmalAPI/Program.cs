@@ -38,49 +38,47 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapPost("/AddTodo", async Task<Results<Ok, BadRequest<String>>>
-    (
-    MinimalDTO modelDTO,
+    (MinimalDTO modelDTO,
     ITodoService service,
-    ILogger<Program> logger
-    ) =>
+    ILogger<Program> logger) =>
 {
-  try
-    {
-        await service.CreateAsync(modelDTO);
-        logger.LogInformation("a new todo items create successfully.");
-        return TypedResults.Ok();
-    }
-    catch (Exception ex) 
-    {
-        logger.LogError(ex, "Error while Creating a new Todo Item:{Message}", ex.Message);
-        return TypedResults.BadRequest(ex.Message);
-    }
+    if (modelDTO == null) return TypedResults.BadRequest("Todo item cannot be null.");
+
+    await service.CreateAsync(modelDTO);
+    return TypedResults.Ok();
+
 });
-app.MapGet("/GtAll",async (ITodoService service) =>
+app.MapGet("/GtAll", async (ITodoService service) =>
 {
     var result = await service.GetAllAsync();
-    if(result == null) return Results.BadRequest(result);
+    if (result == null) return Results.BadRequest(result);
     return Results.Ok(result);
 });
 
 app.MapPut("/Update", async Task<Results<Ok, BadRequest<String>>>
-    (
-    int id,
+    (int id,
     UpdateMinimalDTO modelDTO,
     ITodoService service,
-    ILogger < Program > logger
-    ) =>
+    ILogger<Program> logger ) =>
     {
-        try
-        {
-            await service.UpdateAsync(modelDTO);
-            logger.LogInformation("a new todo items create successfully.");
-            return TypedResults.Ok();
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Error while Creating a new Todo Item:{Message}", ex.Message);
-            return TypedResults.BadRequest(ex.Message);
-        }
-});
+        if (modelDTO == null)
+            return TypedResults.BadRequest("Error while Creating a new Todo Item:{Message}");
+
+
+        await service.UpdateAsync(modelDTO);
+
+        return TypedResults.Ok();
+    });
+
+app.MapDelete("/Delete", async Task<Results<Ok, BadRequest<string>>>
+    ([FromQuery]int id,
+     [FromBody] DeleteMinimalDTO modelDTO,
+     ITodoService service,
+     ILogger<Program> logger) =>
+    {
+        if (modelDTO == null) return TypedResults.BadRequest("Todo item cannot be null.");
+        await service.DeleteByIdAsync(id);
+        return TypedResults.Ok();
+    });
+
 app.Run();
